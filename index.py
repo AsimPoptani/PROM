@@ -191,7 +191,9 @@ while True:
 
     #Update sensors
     updateSensors()
-
+    #Update outputs
+    outputHandler.update()
+    
     drawEverything()
 
     if (gameState==GAME_STATES.GAME_PLAYER_ONE_SERVE):
@@ -231,6 +233,9 @@ while True:
                     gameState= GAME_STATES.GAME_PLAYER_ONE_SERVE # Todo need to change
                 else:
                     gameState= GAME_STATES.GAME_PLAYER_TWO_SERVE
+            # Play 'hit' sound
+            if constants.is_hardware_sound():
+                outputHandler.hardware_blip()
 
         #Check if its near player 2  and heading in that direction
         elif (ball.getBallLocation()[0]==79 and ball.getVelocity()[0]>0):
@@ -244,6 +249,10 @@ while True:
                     gameState= GAME_STATES.GAME_PLAYER_ONE_SERVE # Todo need to change
                 else:
                     gameState= GAME_STATES.GAME_PLAYER_TWO_SERVE
+            # Play 'hit' sound
+            if constants.is_hardware_sound():
+                outputHandler.hardware_blip()
+
         if (joystick1.getScore()==10):
             outputHandler.piglow_win()
             gameScreen.serialPort.write((gameScreen.ESC+"2J").encode("utf-8"))

@@ -4,6 +4,8 @@ from IO.PyGlow import PyGlow
 import RPi.GPIO as GPIO
 
 EXTERNAL_LED_ADDR = 0x3a
+SOUND_ADDR = 0x20
+BLIP_LENGTH = 20
 
 class OutputHandler():
 
@@ -15,6 +17,16 @@ class OutputHandler():
             GPIO.setup(i, GPIO.OUT)
 
         self._bus = smbus.SMBus(1)
+        self._blip_timer = 0
+        self._blip_state = False
+
+    def update(self):
+        if self._blip_state:
+            if self._blip_timer == 0:
+                self._bus.write_byte( SOUND_ADDR, 0xff)
+                self._blip_state = False
+            else:
+                self._blip_timer -= 1
 
     def progressBar(self,progressStage):
         self.set_leds(progressStage,True)
@@ -69,3 +81,10 @@ class OutputHandler():
 
         for i in range(3):
             pyglow.all(brightness=255,speed=100)
+
+    def hardware_blip(self):
+        self._bus.write_byte( SOUND_ADDR, 0x00)
+        self._blip_state = True
+        self._blip_timer = BLIP_LENGTH
+        #print("Blip")
+        
