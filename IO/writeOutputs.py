@@ -2,10 +2,15 @@ import smbus
 import time
 from IO.PyGlow import PyGlow
 import RPi.GPIO as GPIO
+from Constants import Constants
 
 EXTERNAL_LED_ADDR = 0x3a
 SOUND_ADDR = 0x20
 BLIP_LENGTH = 20
+MUSIC_SPEED = .05
+
+## Initialise constants
+constants=Constants()
 
 class OutputHandler():
 
@@ -17,8 +22,19 @@ class OutputHandler():
             GPIO.setup(i, GPIO.OUT)
 
         self._bus = smbus.SMBus(1)
+
+        ## Hardware sound
         self._blip_timer = 0
         self._blip_state = False
+
+        ## Music
+        GPIO.setup(10, GPIO.OUT)
+        self.PWM = GPIO.PWM(10, 100)
+        self.PWM.start(0)
+        
+        self._mu_pointer = 0
+        self._music = [523, 523, 523, 523, 587, 523, 587, 523, 440, 440, 392, 392, 392, 440, 523]
+        self._music2 = list(range(1,2000))
 
     def update(self):
         if self._blip_state:
@@ -27,6 +43,17 @@ class OutputHandler():
                 self._blip_state = False
             else:
                 self._blip_timer -= 1
+        self.update_music()
+
+    def update_music(self):
+        self.PWM.ChangeDutyCycle(50)
+        if self._mu_pointer + 1 < len(self._music):
+            self._mu_pointer += MUSIC_SPEED
+        else:
+            self._mu_pointer = 0.0
+        if constants.is_software_sound():
+            print(self._music[int(self._mu_pointer)])
+            self.PWM.ChangeFrequency(self._music[int(self._mu_pointer)])
 
     def progressBar(self,progressStage):
         self.set_leds(progressStage,True)
