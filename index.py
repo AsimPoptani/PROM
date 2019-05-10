@@ -5,6 +5,7 @@ from IO.SensorHandler import SensorHandler
 from IO.TestSensorHandler import TestSensorHandler
 from Constants import Constants
 from enum import Enum
+import time
 from IO.writeOutputs import OutputHandler
 import Diagnostics
 ######## GAME FUNCTIONS #########
@@ -82,7 +83,10 @@ def clearOldBallLocation():
     oldBallLocation=ball.getOldBallLocation()
     gameScreen.setColourAtLocation(oldBallLocation[0],oldBallLocation[1],"Black")
 
-
+#shows progress bar
+def progressBar():
+    ballPosition=int((ball.getBallLocation()[0]/80.0)*7)
+    outputHandler.progressBar(ballPosition)
 #draws everything
 def drawEverything():
 
@@ -103,6 +107,9 @@ def drawEverything():
     #Draws the ball
     drawBall()
 
+    #Update progress bar
+    progressBar()
+
 
 
 # Draws the net
@@ -111,7 +118,7 @@ def drawNet():
         gameScreen.setColourAtLocation(40, (index * 4)+1,"Green")
         gameScreen.setColourAtLocation(40, (index * 4)+2,"Green")
 
-def drawSingleScore(xShift,score,colour="BrightYellow"):
+def drawSingleScore(xShift,score,colour="BrightCyan"):
     numberPartRowCounter=0
     for numberPartRow in gameScreen.numbers.get(str(score)):
         numberPartCounter=0
@@ -222,16 +229,23 @@ while True:
         if (joystick1.getScore()==10):
             outputHandler.piglow_win()
             gameScreen.serialPort.write((gameScreen.ESC+"2J").encode("utf-8"))
-            gameScreen._cursorTo(0,12)
-            gameScreen.serialPort.write(("--Congrats Left Has Won--").encode("utf-8"))
-            exit()
+            gameScreen._cursorTo(10,12)
+            for a in "--Congrats Left Has Won--":
+                gameScreen.serialPort.write(a.encode("utf-8"))
+                time.sleep(0.1)
+            while (True):
+                outputHandler.piglow_win()
+            
         
         elif (joystick2.getScore()==10):
             outputHandler.piglow_win()
             gameScreen.serialPort.write((gameScreen.ESC+"2J").encode("utf-8"))
-            gameScreen._cursorTo(0,12)
-            gameScreen.serialPort.write(("--Congrats Right Has Won--").encode("utf-8"))
-            exit()            
+            gameScreen._cursorTo(10,12)
+            for a in "--Congrats Right Has Won--":
+                gameScreen.serialPort.write(a.encode("utf-8"))
+                time.sleep(0.1)
+            while (True):
+                outputHandler.piglow_win()           
 
     # updates the game
     gameScreen.update()

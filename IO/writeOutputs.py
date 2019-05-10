@@ -17,13 +17,15 @@ class OutputHandler():
         self._bus = smbus.SMBus(1)
 
     def progressBar(self,progressStage):
-        set_leds(progressStage,True)
+        self.set_leds(progressStage,True)
 
     def set_leds(self, id, state):
         self._set_pi_leds(id, state)
         self._set_out_leds(id, state)
 
     def _set_pi_leds(self, id, state):
+        for i in self.led_table:
+            GPIO.output( i, False)
         GPIO.output(self.led_table[id], state)
 
     def _set_out_leds(self, id, state):
@@ -31,14 +33,14 @@ class OutputHandler():
         out = [1 for i in range(8)]
         if not state:
             self._bus.write_byte( EXTERNAL_LED_ADDR, 0xff)
-            print("Switching off", id)
+            # print("Switching off", id)
         else:
             out[self.out_led_table[id]] = 0
             stringToBulid=""
             for o in out:
                 stringToBulid+= str(o)
 
-            print(int(stringToBulid,2))
+            # print(int(stringToBulid,2))
             self._bus.write_byte( EXTERNAL_LED_ADDR, int(stringToBulid,2))
         '''
         for i in range(8):
