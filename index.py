@@ -5,14 +5,18 @@ from IO.SensorHandler import SensorHandler
 from IO.TestSensorHandler import TestSensorHandler
 from Constants import Constants
 from enum import Enum
+from IO.writeOutputs import OutputHandler
+import Diagnostics
 ######## GAME FUNCTIONS #########
 
 # Update all sensors
 def updateSensors():
+    # Run Diagnostics
+    Diagnostics.updateDiagnostic()
     #update sensor handler
     sensorHandler.update()
     #update both joystick position
-    joystick1.setBatPosition(sensorHandler.get_knob_A())
+    joystick1.setBatPosition(sensorHandler.get_knob_A()/0.97)
     joystick2.setBatPosition(sensorHandler.get_knob_B())
 
 def clearBats():
@@ -89,9 +93,7 @@ def drawEverything():
 
     #Draws the bats
     drawBats()
-
-
-
+    
     # Draws the net
     drawNet()
 
@@ -109,7 +111,7 @@ def drawNet():
         gameScreen.setColourAtLocation(40, (index * 4)+1,"Green")
         gameScreen.setColourAtLocation(40, (index * 4)+2,"Green")
 
-def drawSingleScore(xShift,score,colour="Red"):
+def drawSingleScore(xShift,score,colour="BrightYellow"):
     numberPartRowCounter=0
     for numberPartRow in gameScreen.numbers.get(str(score)):
         numberPartCounter=0
@@ -140,12 +142,15 @@ class GAME_STATES(Enum):
     GAME_START = 0
     GAME_PLAYER_ONE_SERVE=1
     GAME_PLAYER_TWO_SERVE=2
-
+OutputHandler
 gameState=GAME_STATES.GAME_INIT
 ######## INIT #########
 
 #init Screen
 gameScreen=Screen()
+
+#init output handler
+outputHandler=OutputHandler()
 
 #init constants
 constants=Constants()
@@ -213,6 +218,20 @@ while True:
             else:
                 joystick1.incScore()
                 gameState= GAME_STATES.GAME_PLAYER_ONE_SERVE # Todo need to change
+        
+        if (joystick1.getScore()==10):
+            outputHandler.piglow_win()
+            gameScreen.serialPort.write((gameScreen.ESC+"2J").encode("utf-8"))
+            gameScreen._cursorTo(0,12)
+            gameScreen.serialPort.write(("--Congrats Left Has Won--").encode("utf-8"))
+            exit()
+        
+        elif (joystick2.getScore()==10):
+            outputHandler.piglow_win()
+            gameScreen.serialPort.write((gameScreen.ESC+"2J").encode("utf-8"))
+            gameScreen._cursorTo(0,12)
+            gameScreen.serialPort.write(("--Congrats Right Has Won--").encode("utf-8"))
+            exit()            
 
     # updates the game
     gameScreen.update()

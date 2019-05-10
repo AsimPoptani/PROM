@@ -27,6 +27,7 @@ class Screen:
             'BrightCyan': '46;1m',
             'BrightWhite': '47;1m',
         }
+
         # This holds numbers 0 - 9
         self.numbers = {
             '0':

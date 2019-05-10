@@ -1,6 +1,6 @@
 import smbus
 import time
-from PyGlow import PyGlow
+from IO.PyGlow import PyGlow
 import RPi.GPIO as GPIO
 
 EXTERNAL_LED_ADDR = 0x3a

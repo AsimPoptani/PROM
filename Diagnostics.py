@@ -1,6 +1,6 @@
 import math
-from IO import readInputs
-
+from IO.SensorHandler import SensorHandler
+import IO.SensorHandler as SH
 max_bar_length = 10
 ## Input variables
 switch_A_1 = False
@@ -13,7 +13,7 @@ knob_B = 0
 def cursorTo(x, y):
     #move the cursor on the screen to location x,y
     return '\u001b[' +  str(y) + ';'  + str(x) + 'H'
-input_handler = readInputs.InputHandler()
+input_handler = SensorHandler()
 
 
 
@@ -80,4 +80,4 @@ def updateDiagnostic():
     if not round(input_handler.get_knob_B(), 1) == round(knob_B, 1):
         knob_B = input_handler.get_knob_B()
         bars = math.floor((max_bar_length+1)*knob_B)
-        print(cursorTo(7, 10)+("+"*bars)+(" "*(max_bar_length-bars)) +"> " + "Scaled: [" + str(round(input_handler.get_knob_B(),2)) + "] Raw: [" + str(int((sum(input_handler._dac_average_table) / 3) - readInputs.KNOB_B_MIN)) + "]  ")
+        print(cursorTo(7, 10)+("+"*bars)+(" "*(max_bar_length-bars)) +"> " + "Scaled: [" + str(round(input_handler.get_knob_B(),2)) + "] Raw: [" + str(int((sum(input_handler._dac_average_table) / 3) - 0)) + "]  ")
