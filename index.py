@@ -13,9 +13,16 @@ import Diagnostics
 # Update all sensors
 def updateSensors():
     # Run Diagnostics
-    Diagnostics.updateDiagnostic()
+    try:
+        Diagnostics.updateDiagnostic()
+    except Exception as exception:
+        print("@",exception) 
+    
     #update sensor handler
-    sensorHandler.update()
+    try:
+        sensorHandler.update()
+    except Exception as exception:
+        print("@",exception) 
     #update both joystick position
     joystick1.setBatPosition(sensorHandler.get_knob_A())
     joystick2.setBatPosition((sensorHandler.get_knob_B()))
@@ -118,7 +125,7 @@ def drawNet():
         gameScreen.setColourAtLocation(40, (index * 4)+1,"Green")
         gameScreen.setColourAtLocation(40, (index * 4)+2,"Green")
 
-def drawSingleScore(xShift,score,colour="BrightCyan"):
+def drawSingleScore(xShift,score,colour="Red"):
     numberPartRowCounter=0
     for numberPartRow in gameScreen.numbers.get(str(score)):
         numberPartCounter=0
@@ -179,7 +186,10 @@ sensorHandler=SensorHandler()
 #sensorHandler= TestSensorHandler()
 
 #Update sensors
-sensorHandler.update()
+try:
+    sensorHandler.update()
+except Exception as exception:
+    print("@",exception) 
 drawEverything()
 #Update the screen
 gameScreen.update()
@@ -188,12 +198,14 @@ while True:
     #update joysticks
     joystick1.update()
     joystick2.update()
-
+    
     #Update sensors
     updateSensors()
     #Update outputs
-    outputHandler.update()
-    
+    try:
+        outputHandler.update()
+    except Exception as exception:
+        print("@",exception)
     drawEverything()
 
     if (gameState==GAME_STATES.GAME_PLAYER_ONE_SERVE):

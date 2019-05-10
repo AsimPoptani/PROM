@@ -21,7 +21,7 @@ class Screen:
             'BrightBlack': '40;1m',
             'BrightRed': '41;1m',
             'BrightGreen': '42;1m',
-            'BrightYellow': '43;1m',
+            'BrightYellow': '33;1m',
             'BrightBlue': '44;1m',
             'BrightMagenta': '45;1m',
             'BrightCyan': '46;1m',
