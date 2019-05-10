@@ -50,9 +50,9 @@ def drawBats():
         for sizeOfBat in range(0,3):
             gameScreen.setColourAtLocation(79,joystick2.getCurrentPosition()+sizeOfBat,"Blue") # Player 2 has a Blue Joystick
     # Check if longer Bat pressed
-    if (sensorHandler.get_switch_A1()):
+    if (sensorHandler.get_switch_A2()):
         joystick1.setLongerBat()
-    if (sensorHandler.get_switch_B1()):
+    if (sensorHandler.get_switch_B2()):
         joystick2.setLongerBat()
 
 
@@ -178,13 +178,13 @@ while True:
     drawEverything()
 
     if (gameState==GAME_STATES.GAME_PLAYER_ONE_SERVE):
-        if (sensorHandler.get_switch_A2()):
+        if (sensorHandler.get_switch_A1()):
             joystick1.incSevers()
             ball.setRandomSpeed(constants.getRandomSpeed(),True)
             gameState=GAME_STATES.GAME_START
 
     elif (gameState==GAME_STATES.GAME_PLAYER_TWO_SERVE):
-        if (sensorHandler.get_switch_B2()):
+        if (sensorHandler.get_switch_B1()):
             joystick2.incSevers()
             ball.setRandomSpeed(constants.getRandomSpeed(),True)
             gameState=GAME_STATES.GAME_START
