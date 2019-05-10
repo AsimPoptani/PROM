@@ -42,7 +42,7 @@ class Screen:
                  " # ",
                  "###", ],
             '2':
-                ["###",
+                ["## ",
                  "  #",
                  " # ",
                  "#  ",
@@ -99,16 +99,16 @@ class Screen:
                 ]
 
 
-       } 
+       }
         # This holds ESC sequence
         self.ESC = '\u001B['
         # Create a serial port
-        self.serialPort = serial.Serial("/dev/pts/8", 115200)
+        self.serialPort = serial.Serial("/dev/ttyAMA0", 115200)
         # defines a matrix of the board
         self.screen=[[None for y in range(23)] for x in range(80)]
         #defines the old screen
         self.oldScreen=[[None for y  in range(23)] for x in range(80)]
-        #switch off the cursor 
+        #switch off the cursor
         self.serialPort.write('\u001B[?25l'.encode("utf-8"))
         #Sets the background to black
         for y in range(23):
@@ -126,7 +126,7 @@ class Screen:
 
     # Set colour at location
     def setColourAtLocation(self, x, y, colour):
-        
+
         try:
             self.screen[x][y]=self._cursorTo(x, y+1) + self.ESC + self.colours[colour] + " "
 
@@ -146,7 +146,7 @@ class Screen:
             raise ValueError(
                 'Did not pass a char!'
             )
- 
+
 
     def update(self):
         xCount=-1
@@ -156,7 +156,7 @@ class Screen:
             if not(x == self.oldScreen[xCount]):
                 for y in x:
                     yCount+=1
-                    if not (y == self.oldScreen[xCount][yCount]):                
+                    if not (y == self.oldScreen[xCount][yCount]):
                         #write to serial
                         self.serialPort.write(y.encode("utf-8"))
                         #sys.stdout.write(y)

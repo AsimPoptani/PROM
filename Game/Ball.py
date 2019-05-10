@@ -8,7 +8,7 @@ class Ball:
         self.oldBallLocation=[0,0]
 
         #Keeps track of velocitys in terms of time
-        # North  East  these can be negative  
+        # North  East  these can be negative
         self.velocitys=[0,0]
 
         # This tracks how long it has been
@@ -22,21 +22,21 @@ class Ball:
             self.velocitys=[(random.randint(1,3)/100.0)*nDirection,(random.randint(1,3)/100.0)*random.choice([-1.0,1.0])]
         else:
             self.velocitys=[0.0375*nDirection,0]
-        print(self.velocitys)
+        #print(self.velocitys)
         self.timeSpentX=time.time()
         self.timeSpentY=time.time()
-    #Allow to set East Velocity    
+    #Allow to set East Velocity
     def setEastVelocity(self,eastVelocity):
         self.velocitys=[self.velocitys[0],eastVelocity]
 
-    #Allow to set North Velocity    
+    #Allow to set North Velocity
     def setNorthVelocity(self,northVelocity):
         self.velocitys=[northVelocity,self.velocitys[1]]
 
     #returns ball location
     def getBallLocation(self):
         return self.ballLocation
-    
+
     #returns old ball location
     def getOldBallLocation(self):
         return self.oldBallLocation
@@ -51,13 +51,14 @@ class Ball:
         #Calculate distance travelled
         if not self.velocitys[0]==0:
             newNorthDistanceGained=int(timeDiffrenceX/self.velocitys[0])
-            print(timeDiffrenceX)
+            #print(timeDiffrenceX)
             if not newNorthDistanceGained==0:
-                print(newNorthDistanceGained)
+                pass
+                #print(newNorthDistanceGained)
         if not self.velocitys[1]==0:
             newSouthDistanceGained=int(timeDiffrenceY/self.velocitys[1])
 
-       
+
         #If the distance is significant then we update position
         if abs(newNorthDistanceGained)>=1 or abs(newSouthDistanceGained)>=1:
             potentiialBallLocation=[x + y for x, y in zip(self.ballLocation, [newNorthDistanceGained,newSouthDistanceGained])]
@@ -75,16 +76,13 @@ class Ball:
                 self.oldBallLocation=self.ballLocation.copy()
                 # Set the new location
                 self.ballLocation=potentiialBallLocation
-    
+
     #Sets location
     def setLocation(self,x,y):
         # Copy the array to the old ball location
         self.oldBallLocation=self.ballLocation.copy()
         # Set the new location
         self.ballLocation=[x,y]
-    
+
     def getVelocity(self):
         return self.velocitys
-        
-
-
