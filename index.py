@@ -17,8 +17,8 @@ def updateSensors():
     #update sensor handler
     sensorHandler.update()
     #update both joystick position
-    joystick1.setBatPosition(sensorHandler.get_knob_A()/0.97)
-    joystick2.setBatPosition(sensorHandler.get_knob_B())
+    joystick1.setBatPosition(sensorHandler.get_knob_A())
+    joystick2.setBatPosition((sensorHandler.get_knob_B()))
 
 def clearBats():
     # Remove Previous bat position
@@ -169,6 +169,11 @@ joystick2=Joystick()
 #init Ball
 ball=Ball()
 
+#numberOfServes
+serves=0
+
+#swtich
+playerOneTurn=True
 #init Sensor handler
 sensorHandler=SensorHandler()
 #sensorHandler= TestSensorHandler()
@@ -179,7 +184,7 @@ drawEverything()
 #Update the screen
 gameScreen.update()
 gameState= GAME_STATES.GAME_PLAYER_ONE_SERVE
-while True:
+while True:                  
     #update joysticks
     joystick1.update()
     joystick2.update()
@@ -194,13 +199,21 @@ while True:
             joystick1.incSevers()
             ball.setRandomSpeed(constants.getRandomSpeed(),True)
             gameState=GAME_STATES.GAME_START
+            serves+=1
+            if (serves ==5 ):
+                serves=0
+                playerOneTurn= not playerOneTurn
 
     elif (gameState==GAME_STATES.GAME_PLAYER_TWO_SERVE):
         if (sensorHandler.get_switch_B1()):
             joystick2.incSevers()
             ball.setRandomSpeed(constants.getRandomSpeed(),True)
             gameState=GAME_STATES.GAME_START
-
+            serves+=1
+            if (serves ==5 ):
+                serves=0
+                playerOneTurn= not playerOneTurn
+    
     elif(gameState==GAME_STATES.GAME_START):
         #If ball is about to hit the wall detect if paddle is there and if it is calculate
 
@@ -214,7 +227,10 @@ while True:
 
             else:
                 joystick2.incScore()
-                gameState= GAME_STATES.GAME_PLAYER_TWO_SERVE # Todo need to change
+                if  (playerOneTurn):
+                    gameState= GAME_STATES.GAME_PLAYER_ONE_SERVE # Todo need to change
+                else:
+                    gameState= GAME_STATES.GAME_PLAYER_TWO_SERVE
 
         #Check if its near player 2  and heading in that direction
         elif (ball.getBallLocation()[0]==79 and ball.getVelocity()[0]>0):
@@ -224,8 +240,10 @@ while True:
 
             else:
                 joystick1.incScore()
-                gameState= GAME_STATES.GAME_PLAYER_ONE_SERVE # Todo need to change
-        
+                if  (playerOneTurn):
+                    gameState= GAME_STATES.GAME_PLAYER_ONE_SERVE # Todo need to change
+                else:
+                    gameState= GAME_STATES.GAME_PLAYER_TWO_SERVE
         if (joystick1.getScore()==10):
             outputHandler.piglow_win()
             gameScreen.serialPort.write((gameScreen.ESC+"2J").encode("utf-8"))
@@ -233,8 +251,9 @@ while True:
             for a in "--Congrats Left Has Won--":
                 gameScreen.serialPort.write(a.encode("utf-8"))
                 time.sleep(0.1)
-            while (True):
-                outputHandler.piglow_win()
+
+            outputHandler.piglow_win()
+            exit()
             
         
         elif (joystick2.getScore()==10):
@@ -244,8 +263,8 @@ while True:
             for a in "--Congrats Right Has Won--":
                 gameScreen.serialPort.write(a.encode("utf-8"))
                 time.sleep(0.1)
-            while (True):
-                outputHandler.piglow_win()           
+            outputHandler.piglow_win()
+            exit()
 
     # updates the game
     gameScreen.update()

@@ -20,8 +20,11 @@ class OutputHandler():
         self.set_leds(progressStage,True)
 
     def set_leds(self, id, state):
-        self._set_pi_leds(id, state)
-        self._set_out_leds(id, state)
+        try:
+            self._set_pi_leds(id, state)
+            self._set_out_leds(id, state)
+        except Exception:
+            pass
 
     def _set_pi_leds(self, id, state):
         for i in self.led_table:

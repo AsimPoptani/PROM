@@ -1,6 +1,7 @@
 # This is a Joystick Class which will hold the Joystick Values
 import time
-
+def clamp(n, minn, maxn):
+    return max(min(maxn, n), minn)
 class Joystick:
 
     # Initial setup
@@ -40,7 +41,7 @@ class Joystick:
             offset=6
         else:
             offset=3
-        self._currentPos=int(joystickValue*(24-offset))
+        self._currentPos=clamp(int(joystickValue*(24-offset)),0,24-offset)
 
     #return score
     def getScore(self):
