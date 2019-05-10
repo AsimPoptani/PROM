@@ -26,10 +26,10 @@ def clearBats():
 
     if (joystick2.getPreviousLongerBat()):
         for sizeOfBat in range(0,6):
-            gameScreen.setColourAtLocation(79,joystick2.getPreviousPosition()+sizeOfBat,"Black")
+            gameScreen.setColourAtLocation(80,joystick2.getPreviousPosition()+sizeOfBat,"Black")
     else:
         for sizeOfBat in range(0,3):
-            gameScreen.setColourAtLocation(79,joystick2.getPreviousPosition()+sizeOfBat,"Black")
+            gameScreen.setColourAtLocation(80,joystick2.getPreviousPosition()+sizeOfBat,"Black")
 
 # Draws Bats
 def drawBats():
@@ -45,10 +45,10 @@ def drawBats():
 
     if (joystick2.getLongerBat()):
         for sizeOfBat in range(0,6):
-            gameScreen.setColourAtLocation(79,joystick2.getCurrentPosition()+sizeOfBat,"Blue") # Player 2 has a Blue Joystick
+            gameScreen.setColourAtLocation(80,joystick2.getCurrentPosition()+sizeOfBat,"Blue") # Player 2 has a Blue Joystick
     else:
         for sizeOfBat in range(0,3):
-            gameScreen.setColourAtLocation(79,joystick2.getCurrentPosition()+sizeOfBat,"Blue") # Player 2 has a Blue Joystick
+            gameScreen.setColourAtLocation(80,joystick2.getCurrentPosition()+sizeOfBat,"Blue") # Player 2 has a Blue Joystick
     # Check if longer Bat pressed
     if (sensorHandler.get_switch_A2()):
         joystick1.setLongerBat()
@@ -66,9 +66,9 @@ def drawBall():
 
     elif gameState==GAME_STATES.GAME_PLAYER_TWO_SERVE:
         if (joystick1.getLongerBat()):
-            ball.setLocation(78,joystick2.getCurrentPosition()+2)
+            ball.setLocation(79,joystick2.getCurrentPosition()+2)
         else:
-            ball.setLocation(78,joystick2.getCurrentPosition()+1)
+            ball.setLocation(79,joystick2.getCurrentPosition()+1)
     elif gameState==GAME_STATES.GAME_START:
         ball.update()
     ballLocation=ball.getBallLocation()
@@ -205,7 +205,7 @@ while True:
                 gameState= GAME_STATES.GAME_PLAYER_TWO_SERVE # Todo need to change
 
         #Check if its near player 2  and heading in that direction
-        elif (ball.getBallLocation()[0]==78 and ball.getVelocity()[0]>0):
+        elif (ball.getBallLocation()[0]==79 and ball.getVelocity()[0]>0):
             sizeOfBat=6 if joystick2.getLongerBat() else 3
             if ball.getBallLocation()[1] in range(joystick2.getCurrentPosition(),joystick2.getCurrentPosition()+sizeOfBat):
                 ball.setRandomSpeed(True,False) # Todo need to change

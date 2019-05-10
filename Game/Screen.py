@@ -105,14 +105,14 @@ class Screen:
         # Create a serial port
         self.serialPort = serial.Serial("/dev/ttyAMA0", 115200)
         # defines a matrix of the board
-        self.screen=[[None for y in range(23)] for x in range(80)]
+        self.screen=[[None for y in range(24)] for x in range(81)]
         #defines the old screen
-        self.oldScreen=[[None for y  in range(23)] for x in range(80)]
+        self.oldScreen=[[None for y  in range(24)] for x in range(81)]
         #switch off the cursor
         self.serialPort.write('\u001B[?25l'.encode("utf-8"))
         #Sets the background to black
-        for y in range(23):
-            for x in range(80):
+        for y in range(24):
+            for x in range(81):
                 self.setColourAtLocation(x,y,"Black")
 
 

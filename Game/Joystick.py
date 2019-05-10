@@ -40,7 +40,7 @@ class Joystick:
             offset=6
         else:
             offset=3
-        self._currentPos=int(joystickValue*(23-offset))
+        self._currentPos=int(joystickValue*(24-offset))
 
     #return score
     def getScore(self):
