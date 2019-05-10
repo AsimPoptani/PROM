@@ -1,0 +1,1 @@
+scp -rp ../PROM guest@$1:/home/guest/PROM
